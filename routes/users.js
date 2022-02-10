@@ -1,33 +1,61 @@
 var express = require('express');
 var router = express.Router();
 const dbo = require('../db/conn');
+var uuid = require('uuid')
 
 
 /* GET users listing. */
-router.get('/:userId', function(req, res, next) {
-  res.send(`Getting user with Id ${req.params.userId}`);
+router.get('/', function(req, res, next) {
+  // res.send({succes:true, msg:'fetching all users'});
+  const dbConnect = dbo.getDb();
+
+  dbConnect
+    .collection("users")
+    .find({}).limit(50)
+    .toArray(function (err, result) {
+      if (err) {
+        res.status(400).send("Error fetching listings!");
+     } else {
+        // res.send(result);
+        res.json({data:result,succes:true});
+      }
+    });
 });
 
 router.post('/', function(req, res, next) {
   // res.send({success: true, Task:"Posting user"});
   const dbConnect = dbo.getDb();
   const matchDocument = {
-    listing_id: req.body.id,
+    user_id: uuid.v1(),
+    username:req.body.username,
+    password: req.body.password,
     last_modified: new Date(),
-    session_id: req.body.session_id,
-    direction: req.body.direction
   };
+  console.log(req.body)
 
-  dbConnect
+  if(!req.body.username || !req.body.password ){
+    res.send({msg:'Please define user', succes:false})
+  }else{
+    dbConnect
     .collection("users")
     .insertOne(matchDocument, function (err, result) {
       if (err) {
         res.status(400).send("Error inserting matches!");
+
       } else {
-        console.log(`Added a new match with id ${result.insertedId}`);
-        res.status(204).send();
+        console.log(`Added a new match with id ${matchDocument.username}`);
+        res.status(201).send({success:true, msg:`Added a new match with id ${matchDocument.username}`});
       }
     });
+
+
+
+  }
+
+
+
+  
+
 
 });
 router.put('/:userId', function(req, res, next) {
