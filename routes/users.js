@@ -9,18 +9,15 @@ router.get('/', function(req, res, next) {
   // res.send({succes:true, msg:'fetching all users'});
   const dbConnect = dbo.getDb();
 
-  dbConnect
+  const users = dbConnect
     .collection("users")
-    .find({}).limit(50)
-    .toArray(function (err, result) {
-      if (err) {
-        res.status(400).send("Error fetching listings!");
-     } else {
-        // res.send(result);
-        res.json({data:result,succes:true});
-      }
-    });
-});
+    .find({}).toArray((res,req)=>{
+      console.log(req)
+    })
+
+    res.send(users)
+    // console.log(users)
+    })
 
 router.post('/', function(req, res, next) {
   // res.send({success: true, Task:"Posting user"});
