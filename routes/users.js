@@ -11,16 +11,11 @@ router.get('/', function(req, res, next) {
 
   dbConnect
     .collection("users")
-    .find({}).limit(50)
-    .toArray(function (err, result) {
-      if (err) {
-        res.status(400).send("Error fetching listings!");
-     } else {
-        // res.send(result);
-        res.json({data:result,succes:true});
-      }
-    });
-});
+    .find({}).toArray((item, users)=>{
+      res.status(200  ).send(users)
+    })
+
+    })
 
 router.post('/', function(req, res, next) {
   // res.send({success: true, Task:"Posting user"});
