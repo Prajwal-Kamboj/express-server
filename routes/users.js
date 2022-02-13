@@ -9,14 +9,12 @@ router.get('/', function(req, res, next) {
   // res.send({succes:true, msg:'fetching all users'});
   const dbConnect = dbo.getDb();
 
-  const users = dbConnect
+  dbConnect
     .collection("users")
-    .find({}).toArray((res,req)=>{
-      console.log(req)
+    .find({}).toArray((item, users)=>{
+      res.status(200  ).send(users)
     })
 
-    res.send(users)
-    // console.log(users)
     })
 
 router.post('/', function(req, res, next) {
