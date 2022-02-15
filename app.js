@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const dbo = require('./db/conn');
 var cors = require('cors');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+require('./middleware/passport');
 
 
 var indexRouter = require('./routes/index');
@@ -16,6 +19,14 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use(cookieSession({
+  name: 'google-auth-session',
+  keys: ['key1', 'key2']
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -28,7 +39,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.get("/failed", (req, res) => {
+  res.send("Failed")
+})
+app.get("/success", (req, res) => {
+  console.log(req)
+  res.send(`Welcome ${req.user.email}`)
+})
 
+app.get('/google',
+  passport.authenticate('google', {
+          scope:
+              ['email', 'profile']
+      }
+  ));
+
+app.get('/google/callback',
+  passport.authenticate('google', {
+      failureRedirect: '/failed',
+  }),
+  function (req, res) {
+      res.redirect('/success')
+
+  }
+);
 
 
 
