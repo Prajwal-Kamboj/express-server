@@ -4,10 +4,10 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT', email: req.user.email });
+  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
   
   // res.render('index', { title: 'Prajwal', desc : 'authorisation app' });
-  console.log("hi", req.user)
+  // console.log("hi")
 });
 
 module.exports = router;
