@@ -96,6 +96,15 @@ exports.login = async (req,res,next) =>{
     
 };
 
+exports.logout = async (req,res,next) =>{
+    // res.clearCookie('token').send({success:true, msg:'user logged out'});
+    req.session = null // Deletes the cookie.
+    res.cookie('logout','yes',{httpOnly:true}).send({success:true, msg:'user logged out'});
+
+
+    
+};
+
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res, redirect = false) => {
     const token = user.getSignedJwtToken();
@@ -109,6 +118,6 @@ const sendTokenResponse = (user, statusCode, res, redirect = false) => {
 
     res
     .status(statusCode)
-    .cookie('token',token,options)
+    .cookie('token2',token,options)
     .redirect('http://localhost:5000/users');
 };
