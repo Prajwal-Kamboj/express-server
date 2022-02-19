@@ -57,3 +57,10 @@ UserSchema.methods.matchPassword = async function(pass){
 
 
 module.exports = mongoose.model('User', UserSchema);
+
+
+// {
+//     "name": "Prajwal",
+//     "password" : "123abc",
+//     "email":"prajwal.kamboj@gmail.com"
+// }

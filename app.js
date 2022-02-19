@@ -13,7 +13,7 @@ require('./middleware/passport');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const users = require('./routes/auth');
+const auth = require('./routes/auth');
 
 var app = express();  
 
@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', indexRouter);
-app.use('/api/v1/auth', users);
+app.use('/api/v1/auth', auth);
 app.get("/failed", (req, res) => {
   res.send("Failed")
 })
