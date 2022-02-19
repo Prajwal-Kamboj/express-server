@@ -18,16 +18,29 @@ router.get('/', async function(req, res, next) {
     try{
       let decoded  = jwt.verify(token, process.env.JWT_SECRET);
       let user = await Users.findById(decoded.id);
-      res.status(200).json({
-        success: true,
-        data: user
-    })
+
+      if(user){
+        res.status(200).json({
+          success: true,
+          data: user
+      })
+      }else{
+        res.status(401).json({
+          success: false,
+          data: null
+      })
+      }
+      
 
     }catch(err){
       res.send({eror: err.message})
     }
   }else{
-    res.send({msg:'Please log in '})
+    if(req.user){
+      res.send(req.user.email)
+    }else {
+      res.send({msg:'Please log in '})
+    }
   }
 });
 

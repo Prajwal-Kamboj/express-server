@@ -14,6 +14,7 @@ require('./middleware/passport');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const auth = require('./routes/auth');
+const googleSuccess = require('./routes/googleSucess')
 
 var app = express();  
 
@@ -43,10 +44,7 @@ app.use('/api/v1/auth', auth);
 app.get("/failed", (req, res) => {
   res.send("Failed")
 })
-app.get("/success", (req, res) => {
-  console.log(req)
-  res.send(`Welcome ${req.user.email}`)
-})
+app.use("/success", googleSuccess);
 
 app.get('/google',
   passport.authenticate('google', {
@@ -60,8 +58,7 @@ app.get('/google/callback',
       failureRedirect: '/failed',
   }),
   function (req, res) {
-      res.redirect('/success')
-
+    res.redirect('/success')
   }
 );
 

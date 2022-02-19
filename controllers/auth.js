@@ -24,6 +24,32 @@ exports.register = async (req,res,next) =>{
 };
 
 
+// desc - Register User
+//@route Get /success
+//@access   public
+
+exports.googleSuccess = async (req,res,next) =>{
+    const name  = req.user.given_name;
+    const email = req.user.email;
+    const password = '1234abc';
+
+    try {
+        const user = await User.create({
+            name,
+            email,
+            password
+        });
+
+        sendTokenResponse(user,200,res);
+        
+    } catch (err) {
+        console.log(err.message);
+        next();
+    }
+    // res.send({name, email})
+};
+
+
 // desc - login User
 //@route Get /api/v1/auth/login
 //@access   public
