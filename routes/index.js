@@ -9,7 +9,6 @@ router.get('/', async function(req, res, next) {
 
   if(req.headers.authorization){
     token = req.headers.authorization.split(' ')[1];
-    console.log('token', token)
   }else if (req.cookies.token) {
     token = req.cookies.token;
   }

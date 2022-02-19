@@ -40,11 +40,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', indexRouter);
-app.use('/api/v1/auth', auth);
+app.use('/auth', auth);
+
 app.get("/failed", (req, res) => {
   res.send("Failed")
 })
-app.use("/success", googleSuccess);
+app.use('/success', googleSuccess);
 
 app.get('/google',
   passport.authenticate('google', {

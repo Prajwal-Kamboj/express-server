@@ -1,6 +1,8 @@
 const User = require('../models/Users');
 const ErrorResponse = require ('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+
+
 // desc - Register User
 //@route Get /api/v1/auth/register
 //@access   public
@@ -40,10 +42,18 @@ exports.googleSuccess = async (req,res,next) =>{
             password
         });
 
-        sendTokenResponse(user,200,res);
+        sendTokenResponse(user,200,res,true);
         
     } catch (err) {
         console.log(err.message);
+        try{
+            const user2 = await User.findOne({name: name});
+            sendTokenResponse(user2,200,res, true);
+
+        }catch(e){
+            console.log(err.message);
+            next();
+        }
         next();
     }
     // res.send({name, email})
@@ -87,7 +97,7 @@ exports.login = async (req,res,next) =>{
 };
 
 // Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, res, redirect = false) => {
     const token = user.getSignedJwtToken();
 
     const options = {
@@ -95,11 +105,10 @@ const sendTokenResponse = (user, statusCode, res) => {
         httpOnly: true
     };
 
+    var string = encodeURIComponent(token);
+
     res
     .status(statusCode)
     .cookie('token',token,options)
-    .json({
-        success: true,
-        token
-    });
+    .redirect('http://localhost:5000/users');
 };
