@@ -40,12 +40,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', indexRouter);
+
 app.use('/auth', auth);
 
 app.get("/failed", (req, res) => {
   res.send("Failed")
 })
 app.use('/success', googleSuccess);
+
+app.use('/users', usersRouter);
+app.get("/failed", (req, res) => {
+  res.send("Failed")
+})
+app.get("/success", (req, res) => {
+  console.log(req)
+  res.send(`Welcome ${req.user.email}`)
+})
+
 
 app.get('/google',
   passport.authenticate('google', {
@@ -59,7 +70,11 @@ app.get('/google/callback',
       failureRedirect: '/failed',
   }),
   function (req, res) {
+
     res.redirect('/success')
+      res.redirect('/success')
+
+
   }
 );
 
